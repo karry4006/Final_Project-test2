@@ -1,73 +1,123 @@
-# 老師專長搜尋系統
+# TutorSearch 教授專題媒合系統
 
-這是一個前後端分離的全端專案。前端使用 Vue 3 與 Vite，後端使用 Express 與 SQLite，提供教授專長資料查詢與專題概念媒合功能。
+TutorSearch 是一個前後端分離的教授專題媒合網站。使用者可以輸入想做的研究方向，系統會依照教授的研究專長進行關鍵字比對、標籤篩選與媒合排序，協助學生快速找到可能適合的專題指導教授。
+
+## 專案資訊
+
+- 網站標題：TutorSearch 教授專題媒合系統
+- 前端：Vue 3 + Vite
+- 後端：Node.js + Express
+- 資料庫：SQLite
+- 部署平台：Azure App Service
+
 
 ## 專案結構
 
 ```text
-Final_Project/
-├─ client/   前端 Vue/Vite 專案
-├─ server/   後端 Express/SQLite 專案
-└─ package.json
+Final_Project-test2/
+  client/                 # Vue + Vite 前端
+    src/App.vue           # 主要畫面與搜尋邏輯
+    src/main.js           # Vue 入口
+    vite.config.js        # Vite 開發伺服器與 proxy 設定
+
+  server/                 # Express 後端與 SQLite
+    server.js             # API 與正式環境靜態檔服務
+    init-db.js            # SQLite 初始化腳本
+    database.sqlite       # 教授資料庫
+    professors.js         # Azure 備援資料
+
+  .github/workflows/      # GitHub Actions 部署設定
+  package.json            # 專案啟動、建置與 Azure 設定
+  server.js               # Azure Node 入口
 ```
 
-## 安裝套件
+## 功能說明
 
-在專案根目錄依序安裝根目錄、後端與前端套件：
+- 使用者可以輸入研究興趣或專題方向。
+- 系統會根據教授研究專長計算媒合分數。
+- 支援標籤篩選教授。
+- 顯示教授清單、媒合分數、匹配關鍵字與熱門研究趨勢。
+- 支援深色與淺色主題切換。
+- 後端提供教授資料 API。
+- Azure 上若 SQLite 原生套件啟動異常，會使用備援資料避免整站掛掉。
+
+## API
+
+```text
+GET /api/health
+```
+
+檢查後端是否正常啟動。
+
+```text
+GET /api/professors
+```
+
+取得教授資料。
+
+回傳格式：
+
+```json
+{
+  "message": "success",
+  "data": [
+    {
+      "id": 1,
+      "name": "張真誠",
+      "description": "資料庫設計 電子商務安全 ..."
+    }
+  ]
+}
+```
+
+## 安裝與執行
+
+請先安裝 Node.js 20 以上版本。Windows PowerShell 若無法直接執行 `npm`，可以改用 `npm.cmd`。
+
+安裝依賴：
 
 ```powershell
 npm.cmd install
-npm.cmd install --prefix server
-npm.cmd install --prefix client
 ```
 
-如果在 Windows PowerShell 看到 `npm.ps1` 被執行原則封鎖，請使用 `npm.cmd` 執行 npm 指令。
-
-## 初始化資料庫
+初始化 SQLite 資料庫：
 
 ```powershell
 npm.cmd run init-db
 ```
 
-這個指令會建立或重建 `server/database.sqlite`，並寫入教授專長資料。
-
-## 開發模式
-
-同時啟動後端與前端：
+開發模式同時啟動前後端：
 
 ```powershell
 npm.cmd run dev
 ```
 
-啟動後開啟前端：
+開發網址：
 
 ```text
 http://localhost:5173
 ```
 
-後端 API 位址：
+API 網址：
 
 ```text
 http://localhost:3000/api/professors
 ```
 
-## 正式建置與啟動
-
-先建置前端：
+正式建置：
 
 ```powershell
-npm.cmd run build:client
+npm.cmd run build
 ```
 
-再啟動後端：
+正式啟動：
 
 ```powershell
 npm.cmd start
 ```
 
-建置完成後，後端會從 `client/dist` 提供前端頁面：
+正式網址：
 
 ```text
 http://localhost:3000
 ```
-
