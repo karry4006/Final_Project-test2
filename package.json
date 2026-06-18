@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
+  "main": "server.js",
   "engines": {
     "node": ">=20"
   },
   "scripts": {
     "init-db": "node server/init-db.js",
-    "start": "node server/server.js",
+    "start": "node server.js",
     "dev:server": "node server/server.js",
     "dev:client": "npm run dev --prefix client",
     "build:client": "npm run build --prefix client",
